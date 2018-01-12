@@ -150,7 +150,8 @@ public class RSA {
         privateSignature.initSign(this.privateKey);
         privateSignature.update(messageBytes);
         byte[] signature = privateSignature.sign();
-        return Base64.encodeToString(signature, Base64.URL_SAFE);
+        int flags = Base64.NO_PADDING | Base64.NO_WRAP | Base64.URL_SAFE;
+        return Base64.encodeToString(signature, flags);
     }
 
     // b64 message
