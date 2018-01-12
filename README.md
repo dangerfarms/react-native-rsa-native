@@ -4,6 +4,19 @@ A native implementation of RSA key generation and encryption/decryption, sign/ve
 Keychain implementation
 Implementation is in PKCS1
 
+## Fork rationale
+
+This fork makes some changes to the `sign` method:
+
+* SHA256 instead of SHA512
+* format the result with a URL-safe base64 encoding.
+
+This is for a very specific use case, in a project which only uses the `generate` and `sign` methods of this library.
+
+The change to SHA256 hasn't been applied consistently to all methods, only `sign`. For example, the sample code in the Usage example below will fail, since the `verify` method still uses SHA512.
+
+It is extremely unlikely that this code is suitable for other use cases in its current state. Please use the original repository instead.
+
 ## Support
 
 iOS 10+
@@ -11,12 +24,12 @@ android 4.1+ (API 16)
 
 ## Status
 
-Features: 
-Generation, 
-Encryption, 
-Decryption, 
-Sign, 
-Verify, 
+Features:
+Generation,
+Encryption,
+Decryption,
+Sign,
+Verify,
 Keychain support
 
 ## Getting started
