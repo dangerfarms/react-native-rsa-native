@@ -230,7 +230,7 @@ typedef void (^SecKeyPerformBlock)(SecKeyRef key);
     __block NSString *encodedSignature = nil;
 
     void(^signer)(SecKeyRef) = ^(SecKeyRef privateKey) {
-        SecKeyAlgorithm algorithm = kSecKeyAlgorithmRSASignatureMessagePKCS1v15SHA512;
+        SecKeyAlgorithm algorithm = kSecKeyAlgorithmRSASignatureMessagePKCS1v15SHA256;
 
         BOOL canSign = SecKeyIsAlgorithmSupported(privateKey,
                                                 kSecKeyOperationTypeSign,
@@ -250,7 +250,9 @@ typedef void (^SecKeyPerformBlock)(SecKeyRef key);
             }
         }
 
-        encodedSignature = [signature base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+        encodedSignature = [signature base64EncodedStringWithOptions:0];
+        encodedSignature = [encodedSignature stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
+        encodedSignature = [encodedSignature stringByReplacingOccurrencesOfString:@"+" withString:@"-"];
     };
 
     if (self.keyTag) {
