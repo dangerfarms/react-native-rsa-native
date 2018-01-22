@@ -11,6 +11,8 @@
 		5A352E46201246DF00970691 /* RNKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A352E45201246DF00970691 /* RNKeyPair.m */; };
 		5A352E4D201249DC00970691 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A352E49201249DB00970691 /* NSString+Base64.m */; };
 		5A352E4E201249DC00970691 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A352E4C201249DB00970691 /* NSData+Base64.m */; };
+		5A352E51201261B300970691 /* RNSign.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A352E50201261B300970691 /* RNSign.m */; };
+		5A352E53201263CA00970691 /* RSANativeLegacy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A352E52201263CA00970691 /* RSANativeLegacy.m */; };
 		BF40FFDB1F05EC9000DC4E95 /* RNRSA.m in Sources */ = {isa = PBXBuildFile; fileRef = BF40FFD71F05EC9000DC4E95 /* RNRSA.m */; };
 		BF40FFDC1F05EC9000DC4E95 /* RSANative.m in Sources */ = {isa = PBXBuildFile; fileRef = BF40FFDA1F05EC9000DC4E95 /* RSANative.m */; };
 		BFCDFE2A1F694B870016F50C /* RSANative.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = BF40FFD91F05EC9000DC4E95 /* RSANative.h */; };
@@ -41,6 +43,10 @@
 		5A352E4A201249DB00970691 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
 		5A352E4B201249DB00970691 /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
 		5A352E4C201249DB00970691 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		5A352E4F2012618F00970691 /* RNSign.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSign.h; sourceTree = "<group>"; };
+		5A352E50201261B300970691 /* RNSign.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSign.m; sourceTree = "<group>"; };
+		5A352E52201263CA00970691 /* RSANativeLegacy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RSANativeLegacy.m; sourceTree = "<group>"; };
+		5A352E54201263DC00970691 /* RSANativeLegacy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSANativeLegacy.h; sourceTree = "<group>"; };
 		BF40FFBD1F05EC4000DC4E95 /* libRNRSA.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNRSA.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF40FFD71F05EC9000DC4E95 /* RNRSA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNRSA.m; sourceTree = "<group>"; };
 		BF40FFD81F05EC9000DC4E95 /* RNRSA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNRSA.h; sourceTree = "<group>"; };
@@ -73,6 +79,10 @@
 		BF40FFB41F05EC4000DC4E95 = {
 			isa = PBXGroup;
 			children = (
+				5A352E54201263DC00970691 /* RSANativeLegacy.h */,
+				5A352E52201263CA00970691 /* RSANativeLegacy.m */,
+				5A352E50201261B300970691 /* RNSign.m */,
+				5A352E4F2012618F00970691 /* RNSign.h */,
 				5A352E48201249DB00970691 /* Base64 */,
 				5A352E472012470A00970691 /* RNKeyPair.h */,
 				5A352E45201246DF00970691 /* RNKeyPair.m */,
@@ -150,11 +160,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A352E51201261B300970691 /* RNSign.m in Sources */,
 				BF40FFDB1F05EC9000DC4E95 /* RNRSA.m in Sources */,
 				BF40FFDC1F05EC9000DC4E95 /* RSANative.m in Sources */,
 				186F49E31F06836A00F71861 /* RSAFormatter.m in Sources */,
 				5A352E46201246DF00970691 /* RNKeyPair.m in Sources */,
 				5A352E4D201249DC00970691 /* NSString+Base64.m in Sources */,
+				5A352E53201263CA00970691 /* RSANativeLegacy.m in Sources */,
 				5A352E4E201249DC00970691 /* NSData+Base64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
