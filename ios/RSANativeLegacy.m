@@ -19,22 +19,46 @@
 
 - (void)setPrivateKey:(NSString *)privateKey {
     privateKey = [RSAFormatter stripHeaders: privateKey];
-
-    NSDictionary* options = @{(id)kSecAttrKeyType: (id)kSecAttrKeyTypeRSA,
-                              (id)kSecAttrKeyClass: (id)kSecAttrKeyClassPrivate,
-                              (id)kSecAttrKeySizeInBits: @2048,
-                              };
-    CFErrorRef error = NULL;
+    privateKey = [privateKey stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+    privateKey = [privateKey stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    privateKey = [privateKey stringByReplacingOccurrencesOfString:@"\t" withString:@""];
+    privateKey = [privateKey stringByReplacingOccurrencesOfString:@" "  withString:@""];
     NSData *data = [[NSData alloc] initWithBase64EncodedString:privateKey options:NSDataBase64DecodingIgnoreUnknownCharacters];
-    SecKeyRef key = SecKeyCreateWithData((__bridge CFDataRef)data,
-                                         (__bridge CFDictionaryRef)options,
-                                         &error);
-    if (!key) {
-        NSError *err = CFBridgingRelease(error);
-        NSLog(@"%@", err);
-    } else {
-        _privateKeyRef = key;
+
+    //a tag to read/write keychain storage
+    NSString *tag = @"RNRSA_TEMP_KEY";
+    NSData *d_tag = [NSData dataWithBytes:[tag UTF8String] length:[tag length]];
+
+    NSMutableDictionary *keyAddDict = [[NSMutableDictionary alloc] init];
+    [keyAddDict setObject:(__bridge id)kSecClassKey forKey:(__bridge id)kSecClass];
+    [keyAddDict setObject:(id)kSecAttrAccessibleWhenUnlocked forKey:(id)kSecAttrAccessible];
+    [keyAddDict setObject:(__bridge id)kSecAttrKeyTypeRSA forKey:(__bridge id)kSecAttrKeyType];
+    [keyAddDict setObject:d_tag forKey:(id)kSecAttrApplicationTag];
+    SecItemDelete((CFDictionaryRef)keyAddDict);
+
+    [keyAddDict setObject:data forKey:(__bridge id)kSecValueData];
+    [keyAddDict setObject:(__bridge id)kSecAttrKeyClassPrivate forKey:(__bridge id)kSecAttrKeyClass];
+    [keyAddDict setObject:[NSNumber numberWithBool:YES] forKey:(__bridge id)kSecReturnPersistentRef];
+
+    CFTypeRef persistKey = nil;
+    OSStatus status = SecItemAdd((CFDictionaryRef)keyAddDict, &persistKey);
+
+    if (persistKey != nil) {
+        CFRelease(persistKey);
     }
+
+    NSMutableDictionary *keyCopyDict = [[NSMutableDictionary alloc] init];
+    [keyCopyDict setObject:(__bridge id)kSecClassKey forKey:(__bridge id)kSecClass];
+    [keyCopyDict setObject:(id)kSecAttrAccessibleWhenUnlocked forKey:(id)kSecAttrAccessible];
+    [keyCopyDict setObject:(__bridge id)kSecAttrKeyTypeRSA forKey:(__bridge id)kSecAttrKeyType];
+    [keyCopyDict setObject:d_tag forKey:(id)kSecAttrApplicationTag];
+    [keyCopyDict setObject:(__bridge id)kSecAttrKeyClassPrivate forKey:(__bridge id)kSecAttrKeyClass];
+    [keyCopyDict setObject:[NSNumber numberWithBool:YES] forKey:(__bridge id)kSecReturnRef];
+
+    CFTypeRef key = nil;
+    OSStatus copyStatus = SecItemCopyMatching((CFDictionaryRef)keyCopyDict, (CFTypeRef *)&key);
+
+    _privateKeyRef = (SecKeyRef) key;
 }
 
 - (NSString *)sign:(NSString *)message {
