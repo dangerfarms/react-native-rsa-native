@@ -1,5 +1,5 @@
 
-import { NativeModules } from 'react-native';
+import { Platform, NativeModules } from 'react-native';
 
 // const { RNRSAKeychain } = NativeModules;
 // const { RNRSA } = NativeModules;
@@ -8,5 +8,15 @@ import { NativeModules } from 'react-native';
 
 // export default RNRSA;
 
-const { RNSign, RNKeyPair } = NativeModules;
-export { RNSign as RSASign, RNKeyPair as RSAKeyPair };
+let RSADigitalSignatureModule;
+let RSAKeygenModule;
+
+if (Platform.OS === 'ios') {
+  RSADigitalSignatureModule = NativeModules.RNSign;
+  RSAKeygenModule = NativeModules.RNKeyPair;
+} else {
+  RSADigitalSignatureModule = NativeModules.RNRSA;
+  RSAKeygenModule = NativeModules.RNRSA;
+}
+
+export { RSADigitalSignatureModule as RSASign, RSAKeygenModule as RSAKeyPair };

@@ -230,9 +230,10 @@ RCT_EXPORT_MODULE()
 }
 
 
-RCT_EXPORT_METHOD(generate: (RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(generate: (RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
 
-    callback(@[[self generateKeyPair: 2048]]);
+    NSDictionary *keys = [self generateKeyPair: 2048];
+    resolve(keys);
 
 }
 
