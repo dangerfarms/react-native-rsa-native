@@ -1,16 +1,14 @@
 package com.RNRSA;
 
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
-import android.util.Log;
 
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.KeyStore;
@@ -25,10 +23,8 @@ import java.security.InvalidKeyException;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.security.UnrecoverableEntryException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.X509EncodedKeySpec;
-import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.InvalidKeySpecException;
 
@@ -36,7 +32,6 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.BadPaddingException;
-import javax.security.cert.X509Certificate;
 
 import java.io.IOException;
 
@@ -44,19 +39,14 @@ import org.spongycastle.asn1.ASN1InputStream;
 import org.spongycastle.asn1.ASN1Encodable;
 import org.spongycastle.asn1.ASN1Primitive;
 import org.spongycastle.asn1.pkcs.PrivateKeyInfo;
-import org.spongycastle.asn1.pkcs.RSAPublicKey;
 import org.spongycastle.asn1.pkcs.RSAPrivateKey;
 import org.spongycastle.asn1.x509.SubjectPublicKeyInfo;
-import org.spongycastle.asn1.x509.RSAPublicKeyStructure;
 import org.spongycastle.util.io.pem.PemObject;
 import org.spongycastle.util.io.pem.PemWriter;
 import org.spongycastle.util.io.pem.PemReader;
-import org.spongycastle.asn1.pkcs.RSAPublicKey;
 import org.spongycastle.openssl.PEMParser;
-import org.spongycastle.util.io.pem.PemObject;
 
 import static android.security.keystore.KeyProperties.*;
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class RSA {
 
@@ -117,8 +107,8 @@ public class RSA {
     }
 
     // UTF-8 input
-    public String encrypt(String message) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException, InvalidKeyException {
-        byte[] data = message.getBytes(UTF_8);
+    public String encrypt(String message) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException, InvalidKeyException, UnsupportedEncodingException {
+        byte[] data = message.getBytes("UTF-8");
         byte[] cipherBytes = encrypt(data);
         return Base64.encodeToString(cipherBytes, Base64.DEFAULT);
     }
@@ -132,10 +122,10 @@ public class RSA {
     }
 
     // UTF-8 input
-    public String decrypt(String message) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException, InvalidKeyException {
+    public String decrypt(String message) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException, InvalidKeyException, UnsupportedEncodingException {
         byte[] cipherBytes = Base64.decode(message, Base64.DEFAULT);
         byte[] data = decrypt(cipherBytes);
-        return new String(data, UTF_8);
+        return new String(data, "UTF-8");
     }
 
     // Base64 input
@@ -161,8 +151,8 @@ public class RSA {
     }
 
     //utf-8 message
-    public String sign(String message) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException, InvalidKeyException, SignatureException {
-        byte[] messageBytes = message.getBytes(UTF_8);
+    public String sign(String message) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException, InvalidKeyException, SignatureException, UnsupportedEncodingException {
+        byte[] messageBytes = message.getBytes("UTF-8");
         return sign(messageBytes);
     }
 
@@ -183,10 +173,10 @@ public class RSA {
     }
 
     // utf-8 message
-    public boolean verify(String signature, String message) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException, InvalidKeyException, SignatureException {
+    public boolean verify(String signature, String message) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException, InvalidKeyException, SignatureException, UnsupportedEncodingException {
         Signature publicSignature = Signature.getInstance("SHA512withRSA");
         publicSignature.initVerify(this.publicKey);
-        byte[] messageBytes = message.getBytes(UTF_8);
+        byte[] messageBytes = message.getBytes("UTF-8");
         byte[] signatureBytes = Base64.decode(signature, Base64.DEFAULT);
         return verify(signatureBytes, messageBytes);
     }
